@@ -11,16 +11,18 @@ namespace GestoreEventi
         private string titolo;
         private DateTime data;
         private int capienzaMassima;
-        private int numeroPostiPrenotati;
+        private int numPostiPrenotati;
 
+        //COSTRUTTORE
         public Evento(string titolo, DateTime data, int capienzaMassima, int numeroPostiPrenotati)
         {
             this.titolo = titolo;
             this.data = data;
             this.capienzaMassima = capienzaMassima;
-            this.numeroPostiPrenotati = 0;
+            this.numPostiPrenotati = 0;
         }
 
+        //GETTERS
         public string Gettitolo()
         {
             return titolo;
@@ -36,7 +38,24 @@ namespace GestoreEventi
         }
         public int GetPostiPrenotati()
         {
-            return this.numeroPostiPrenotati;
+            return this.numPostiPrenotati;
+        }
+
+        //SETTERS
+        public void SetTitolo()
+        {
+            if(titolo.Trim() == "")
+            {
+                this.titolo = titolo;
+            }
+            else
+            {
+                throw new Exception("Inserire il titolo corretto");
+            }
+        }
+        public void SetData()
+        {
+            DateTime data = DateTime.
         }
     }
 }
