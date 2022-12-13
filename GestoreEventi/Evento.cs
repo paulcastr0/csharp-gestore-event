@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,23 +16,23 @@ namespace GestoreEventi
         private int numPostiPrenotati;
 
         //COSTRUTTORE
-        public Evento(string titolo, DateTime data, int capienzaMassima, int numeroPostiPrenotati)
+        public Evento(string titolo, string data, int capienzaMassima, int numeroPostiPrenotati)
         {
-            this.titolo = titolo;
-            this.data = data;
+            SetTitolo(titolo);
+            SetDataEvento(data);
             this.capienzaMassima = capienzaMassima;
             this.numPostiPrenotati = 0;
         }
 
         //GETTERS
-        public string Gettitolo()
+        public string GetTitolo()
         {
-            return titolo;
+            return this.titolo;
         }
 
-        public DateTime Data()
+        public DateTime GetData()
         {
-            return this.data;
+            return this.data;   
         }
         public int GetCapienzaMassima()
         {
@@ -42,20 +44,60 @@ namespace GestoreEventi
         }
 
         //SETTERS
-        public void SetTitolo()
+        public void SetTitolo(string titolo)
         {
-            if(titolo.Trim() == "")
+            if(titolo.Trim() == "" || titolo.Length == 0)
             {
-                this.titolo = titolo;
+                throw new Exception("Insert the correct title!");
             }
             else
             {
-                throw new Exception("Inserire il titolo corretto");
+                this.titolo = titolo;
             }
         }
-        public void SetData()
+
+        //METODI PUBBLIC
+        public void SetDataEvento(string datastring)
         {
-            DateTime data = DateTime.
+            DateTime dataAttuale = DateTime.Now;
+
+            DateTime dataInput = DateTime.Parse(datastring);
+            if (dataInput <= dataAttuale)
+            {
+                throw new Exception("Data invalid or Date expired!");
+            }
+            else
+            {
+                this.data = dataInput;
+            }
+        }
+        public void NumPostiPrenotati(int numPostiPrenotati)
+        {
+            int numPostiDisponibili = this.capienzaMassima - this.numPostiPrenotati;
+            if(numPostiDisponibili == 0 || numPostiPrenotati > numPostiDisponibili)
+            {
+                throw new Exception("Not Available! Event fully booked");
+            }
+            else
+            {
+                this.numPostiPrenotati += numPostiPrenotati;
+            }
+        }
+        public void DisdiciPosti(int numPostiPrenotati)
+        {
+            if(this.numPostiPrenotati == 0)
+            {
+                throw new Exception("Not possible to cancel the seats for the Event");
+            }
+            else
+            {
+                this.numPostiPrenotati -= numPostiPrenotati;
+            }
+        }
+        public override string ToString()
+        {
+            string datastring = this.data.ToString("dd/MM/yyyy");
+            return datastring + "-" + this.titolo;
         }
     }
 }
